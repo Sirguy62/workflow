@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
-// GET all workflows
 export async function GET() {
   const workflows = await prisma.workflow.findMany({
     orderBy: { createdAt: "desc" },
@@ -9,7 +9,6 @@ export async function GET() {
   return NextResponse.json(workflows);
 }
 
-// CREATE workflow + stages
 export async function POST(req) {
   const { name, description } = await req.json();
 
@@ -26,15 +25,12 @@ export async function POST(req) {
         ],
       },
     },
-    include: {
-      stages: true,
-    },
   });
 
+  revalidatePath("/workflows");
   return NextResponse.json(workflow);
 }
 
-// UPDATE workflow
 export async function PATCH(req) {
   const { id, name, description } = await req.json();
 
@@ -43,16 +39,15 @@ export async function PATCH(req) {
     data: { name, description },
   });
 
+  revalidatePath("/workflows");
   return NextResponse.json(workflow);
 }
 
-// DELETE workflow
 export async function DELETE(req) {
   const { id } = await req.json();
 
-  await prisma.workflow.delete({
-    where: { id },
-  });
+  await prisma.workflow.delete({ where: { id } });
 
+  revalidatePath("/workflows");
   return NextResponse.json({ ok: true });
 }

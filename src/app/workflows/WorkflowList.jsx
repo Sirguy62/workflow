@@ -10,8 +10,8 @@ export default function WorkflowList({ workflows }) {
   return (
     <>
       <div className="flex justify-between mb-4">
-          <h1 className="text-2xl text-gray-600 font-bold">Workflows</h1>
-       
+        <h1 className="text-2xl text-gray-600 font-bold">Workflows</h1>
+
         <button
           onClick={() => setOpen(true)}
           className="bg-blue-600 text-white px-4 py-2 rounded"

@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Workflow {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+
+  stages Stage[]
+  tasks  Task[]
+}
+
+model Stage {
+  id         String   @id @default(cuid())
+  name       String
+  order      Int
+  workflowId String
+
+  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  tasks    Task[]
+
+  @@unique([workflowId, order])
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  priority    Int      @default(1)
+  dueDate     DateTime?
+  order       Int      @default(0) 
+  createdAt   DateTime @default(now())
+
+  workflowId String
+  stageId    String
+
+  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  stage    Stage    @relation(fields: [stageId], references: [id], onDelete: Cascade)
+}

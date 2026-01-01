@@ -1,5 +1,7 @@
-import WorkflowList from "./WorkflowList";
 import { getWorkflows } from "../../../lib/workflow.service";
+import WorkflowList from "./WorkflowList";
+
+export const dynamic = "force-dynamic";
 
 export default async function WorkflowsPage() {
   const workflows = await getWorkflows();

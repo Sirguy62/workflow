@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 
-export default function EditWorkflowModal({ workflow, onClose, onSave }) {
+export default function EditWorkflowModal({
+  workflow,
+  onClose,
+  onSave,
+  onDelete,
+}) {
   const [name, setName] = useState(workflow.name);
   const [description, setDescription] = useState(workflow.description || "");
   const [loading, setLoading] = useState(false);
@@ -27,10 +32,9 @@ export default function EditWorkflowModal({ workflow, onClose, onSave }) {
       return;
     }
 
-    const updatedWorkflow = await res.json();
-
-    onSave(updatedWorkflow); // ✅ RETURN UPDATED DATA
+    await res.json();
     setLoading(false);
+    onSave();
   }
 
   return (
@@ -51,21 +55,23 @@ export default function EditWorkflowModal({ workflow, onClose, onSave }) {
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        <div className="flex justify-end gap-3">
-          <button
-            className="text-gray-600 border-gray-300 border p-2 rounded"
-            type="button"
-            onClick={onClose}
-          >
-            Cancel
+        <div className="flex justify-between">
+          <button type="button" onClick={onDelete} className="text-red-600">
+            Delete
           </button>
 
-          <button
-            disabled={loading}
-            className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
-          >
-            Save
-          </button>
+          <div className="flex gap-3">
+            <button type="button" onClick={onClose}>
+              Cancel
+            </button>
+
+            <button
+              disabled={loading}
+              className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+            >
+              Save
+            </button>
+          </div>
         </div>
       </form>
     </div>

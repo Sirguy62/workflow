@@ -9,9 +9,7 @@ export default function WorkflowCard({ workflow }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function handleDelete(e) {
-    e.stopPropagation();
-
+  async function deleteWorkflow() {
     if (!confirm("Delete this workflow? This cannot be undone.")) return;
 
     setLoading(true);
@@ -22,7 +20,12 @@ export default function WorkflowCard({ workflow }) {
       body: JSON.stringify({ id: workflow.id }),
     });
 
-    router.refresh(); // ✅ re-fetch workflows
+    router.refresh();
+  }
+
+  function handleDelete(e) {
+    e.stopPropagation();
+    deleteWorkflow();
   }
 
   function handleEdit(e) {
@@ -34,7 +37,7 @@ export default function WorkflowCard({ workflow }) {
     <>
       <div
         onClick={() => router.push(`/workflows/${workflow.id}`)}
-        className="border rounded-lg p-4 cursor-pointer hover:shadow transition"
+        className="border rounded-lg p-4 cursor-pointer hover:shadow transition bg-white"
       >
         <h2 className="font-semibold text-gray-600">{workflow.name}</h2>
 
@@ -42,7 +45,6 @@ export default function WorkflowCard({ workflow }) {
           {workflow.description || "No description"}
         </p>
 
-        {/* ACTIONS */}
         <div className="flex gap-4 mt-3 text-sm">
           <button
             onClick={handleEdit}
@@ -61,7 +63,6 @@ export default function WorkflowCard({ workflow }) {
         </div>
       </div>
 
-      {/* EDIT MODAL */}
       {openEdit && (
         <EditWorkflowModal
           workflow={workflow}
@@ -70,7 +71,7 @@ export default function WorkflowCard({ workflow }) {
             setOpenEdit(false);
             router.refresh();
           }}
-          onDelete={() => handleDelete(new Event("click"))}
+          onDelete={deleteWorkflow}
         />
       )}
     </>

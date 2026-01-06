@@ -4,7 +4,7 @@ import { useState } from "react";
 import CreateWorkflowModal from "./CreateWorkflowModal";
 import WorkflowCard from "./WorkflowCard";
 
-export default function WorkflowList({ workflows }) {
+export default function WorkflowList({ workflows = [] }) {
   const [open, setOpen] = useState(false);
 
   return (

@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 
 export async function createTask(data) {
   return prisma.task.create({ data });

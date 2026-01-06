@@ -8,7 +8,7 @@ export default async function WorkflowsPage() {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <WorkflowList workflows={workflows} />
+      <WorkflowList workflows={workflows ?? []} />
     </div>
   );
 }

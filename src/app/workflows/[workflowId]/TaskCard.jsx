@@ -1,36 +1,47 @@
 "use client";
 
 import { useState } from "react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import EditTaskModal from "./EditTaskModal";
 
-export default function TaskCard({
-  task,
-  stageId,
-  onDragStart,
-  onUpdate,
-  onDelete,
-  isDragging,
-}) {
+export default function TaskCard({ task, stageId, onUpdate, onDelete }) {
   const [open, setOpen] = useState(false);
 
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: task.id,
+    data: { ...task, stageId },
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.4 : 1,
+  };
+
   const priorityStyles = {
-    1: "bg-red-100 text-red-700", // High
-    2: "bg-yellow-100 text-yellow-700", // Medium
-    3: "bg-green-100 text-green-700", // Low
+    1: "bg-red-100 text-red-700",
+    2: "bg-yellow-100 text-yellow-700",
+    3: "bg-green-100 text-green-700",
   };
 
   return (
     <>
       <div
-        onMouseDown={() => onDragStart(task, stageId)}
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
         onDoubleClick={() => setOpen(true)}
-        className={`
-          relative bg-white rounded p-3 shadow-sm text-sm cursor-grab
-          active:cursor-grabbing select-none
-          ${isDragging ? "opacity-40" : ""}
-        `}
+        className="relative bg-white rounded p-3 shadow-sm text-sm cursor-grab active:cursor-grabbing select-none"
       >
-        {/* ACTION BUTTONS (ALWAYS VISIBLE) */}
         <div className="absolute top-2 right-2 flex gap-2">
           <button
             onClick={() => setOpen(true)}
@@ -49,10 +60,8 @@ export default function TaskCard({
           </button>
         </div>
 
-        {/* TITLE */}
         <div className="font-medium text-gray-600 mb-3 pr-16">{task.title}</div>
 
-        {/* META */}
         <div className="flex justify-between items-center text-xs">
           <span
             className={`px-2 py-0.5 rounded font-medium ${
@@ -74,7 +83,6 @@ export default function TaskCard({
         </div>
       </div>
 
-      {/* EDIT MODAL */}
       {open && (
         <EditTaskModal
           task={task}

@@ -1,5 +1,12 @@
-import { redirect } from "next/navigation";
+import React from "react";
+import WorkflowList from "./workflows/WorkflowList";
 
-export default function Home() {
-  redirect("/workflows");
-}
+const page = () => {
+  return (
+    <div>
+      <WorkflowList />
+    </div>
+  );
+};
+
+export default page;

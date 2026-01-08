@@ -10,7 +10,7 @@ const session = await auth.api.getSession({
 });
 
 if (session) {
-  redirect("/");
+  redirect("/dashboard");
 }
 
 

@@ -1,12 +1,5 @@
-import React from "react";
-import WorkflowList from "./workflows/WorkflowList";
+import { redirect } from "next/navigation";
 
-const page = () => {
-  return (
-    <div>
-      <WorkflowList />
-    </div>
-  );
-};
-
-export default page;
+export default function HomePage() {
+  redirect("/dashboard");
+}

@@ -90,23 +90,41 @@ export default function TaskList({ tasks, setTasks }) {
             {filter === "all" ? "All Tasks" : `${filter} Priority`}
           </span>
         </div>
+        {/* FILTERS */}
+        <div>
+          {/* ✅ Mobile (sm) → SELECT */}
+          <div className="block md:hidden">
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg border border-purple-300/40 text-sm capitalize text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/40"
+            >
+              {["all", "today", "week", "high", "medium", "low"].map((f) => (
+                <option key={f} value={f}>
+                  {f}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className="flex gap-2 bg-gray-100 rounded-lg p-1">
-          {["all", "today", "week", "high", "medium", "low"].map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`px-3 py-1 text-sm rounded-md capitalize transition
+          {/* ✅ Desktop (md+) → BUTTONS */}
+          <div className="hidden md:flex gap-2 bg-gray-100 rounded-lg p-1">
+            {["all", "today", "week", "high", "medium", "low"].map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`px-3 py-1 text-sm rounded-md capitalize transition
           ${
             filter === f
               ? "bg-white text-purple-600 shadow"
               : "text-gray-500 hover:text-gray-700"
           }
         `}
-            >
-              {f}
-            </button>
-          ))}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

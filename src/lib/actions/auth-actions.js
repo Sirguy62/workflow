@@ -10,9 +10,12 @@ export async function signUp(email, password, name) {
       email,
       password,
       name,
-      callbackURL: "/dashboard",
     },
   });
+
+  if (result?.user) {
+    redirect("/dashboard");
+  }
 
   return result;
 }
@@ -22,9 +25,12 @@ export async function signIn(email, password) {
     body: {
       email,
       password,
-      callbackURL: "/dashboard",
     },
   });
+
+  if (result?.user) {
+    redirect("/dashboard");
+  }
 
   return result;
 }
@@ -43,7 +49,9 @@ export async function signInSocial(provider) {
 }
 
 export async function signOut() {
-  return auth.api.signOut({
+  await auth.api.signOut({
     headers: await headers(),
   });
+
+  redirect("/auth");
 }

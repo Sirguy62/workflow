@@ -12,7 +12,6 @@ export default function Navigation({ session }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
-  const router = useRouter();
 
 
   const name = session?.user?.name || "User";
@@ -31,7 +30,6 @@ export default function Navigation({ session }) {
 
    const handleSignOut = async () => {
      await signOut();
-     router.push("/auth");
      setOpen(false);
    };
 

@@ -7,12 +7,10 @@ import { useEffect, useRef, useState } from "react";
 import { signOut } from "@/lib/actions/auth-actions";
 import { usePathname, useRouter } from "next/navigation";
 
-
 export default function Navigation({ session }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
-
 
   const name = session?.user?.name || "User";
   const initial = name.charAt(0).toUpperCase();
@@ -28,10 +26,10 @@ export default function Navigation({ session }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-   const handleSignOut = async () => {
-     await signOut();
-     setOpen(false);
-   };
+  const handleSignOut = async () => {
+    await signOut();
+    setOpen(false);
+  };
 
   return (
     <header className="bg-white border-b sticky top-0 z-50">
@@ -54,30 +52,10 @@ export default function Navigation({ session }) {
     
     "
               />
-              {/* <span
-                className="
-      absolute -bottom-1 -right-1
-      w-3 h-3
-      bg-white
-      rounded-full
-      shadow-md
-    "
-              /> */}
             </div>
           </div>
         </Link>
-
-        {/* Right side */}
         <div className="flex items-center gap-4">
-          {/* {session && (
-            <Link
-              href="/dashboard"
-              className="hidden sm:inline-flex bg-indigo-600 text-white px-4 py-2 rounded-lg"
-            >
-              Dashboard
-            </Link>
-          )} */}
-
           {!session && (
             <Link href="/auth" className="text-gray-600 hover:text-gray-900">
               Sign In

@@ -32,7 +32,6 @@ export default function TaskStatistics({ tasks }) {
         />
       </div>
 
-      {/* PROGRESS BAR */}
       <div>
         <div className="flex justify-between text-sm text-gray-500 mb-1">
           <span>Task progress</span>

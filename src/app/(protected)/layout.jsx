@@ -8,7 +8,6 @@ export default async function ProtectedLayout({ children }) {
     headers: await headers(),
   });
 
-  // 🔴 NOT LOGGED IN → SEND TO AUTH
   if (!session) {
     redirect("/auth");
   }

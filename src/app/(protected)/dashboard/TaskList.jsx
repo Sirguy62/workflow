@@ -4,6 +4,7 @@ import {
   DndContext,
   closestCenter,
   PointerSensor,
+  TouchSensor,
   KeyboardSensor,
   useSensor,
   useSensors,
@@ -20,14 +21,28 @@ import TaskCard from "./TaskCard";
 import CreateTaskModal from "./CreateTaskModal";
 
 export default function TaskList({ tasks, setTasks }) {
-  //   const [tasks, setTasks] = useState([]);
   const [activeTask, setActiveTask] = useState(null);
   const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState("all");
 
-
+  /* ======================
+     ✅ MOBILE-SAFE SENSORS
+  ====================== */
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    // Desktop / mouse
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 6 },
+    }),
+
+    // ✅ Mobile / touch (long press)
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200, // long press
+        tolerance: 8,
+      },
+    }),
+
+    // Keyboard accessibility
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -58,31 +73,30 @@ export default function TaskList({ tasks, setTasks }) {
   const filteredTasks = tasks.filter((task) => {
     if (filter === "all") return true;
 
-    if (filter === "high" || filter === "medium" || filter === "low") {
+    if (["high", "medium", "low"].includes(filter)) {
       return task.priority?.toLowerCase() === filter;
     }
 
     if (filter === "today") {
       if (!task.dueDate) return false;
-      const today = new Date();
-      const due = new Date(task.dueDate);
-      return due.toDateString() === today.toDateString();
+      return (
+        new Date(task.dueDate).toDateString() === new Date().toDateString()
+      );
     }
 
     if (filter === "week") {
       if (!task.dueDate) return false;
-      const now = new Date();
-      const due = new Date(task.dueDate);
-      const diff = (due - now) / (1000 * 60 * 60 * 24);
+      const diff =
+        (new Date(task.dueDate) - new Date()) / (1000 * 60 * 60 * 24);
       return diff >= 0 && diff <= 7;
     }
 
     return true;
   });
 
-
   return (
     <div className="bg-white rounded-xl border p-4">
+      {/* HEADER */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-gray-700 font-semibold">
           <span>🔍</span>
@@ -90,14 +104,15 @@ export default function TaskList({ tasks, setTasks }) {
             {filter === "all" ? "All Tasks" : `${filter} Priority`}
           </span>
         </div>
+
         {/* FILTERS */}
         <div>
-          {/* ✅ Mobile (sm) → SELECT */}
+          {/* Mobile → Select */}
           <div className="block md:hidden">
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-purple-300/40 text-sm capitalize text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/40"
+              className="px-3 py-2 rounded-lg border text-sm capitalize"
             >
               {["all", "today", "week", "high", "medium", "low"].map((f) => (
                 <option key={f} value={f}>
@@ -107,19 +122,19 @@ export default function TaskList({ tasks, setTasks }) {
             </select>
           </div>
 
-          {/* ✅ Desktop (md+) → BUTTONS */}
+          {/* Desktop → Buttons */}
           <div className="hidden md:flex gap-2 bg-gray-100 rounded-lg p-1">
             {["all", "today", "week", "high", "medium", "low"].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
                 className={`px-3 py-1 text-sm rounded-md capitalize transition
-          ${
-            filter === f
-              ? "bg-white text-purple-600 shadow"
-              : "text-gray-500 hover:text-gray-700"
-          }
-        `}
+                  ${
+                    filter === f
+                      ? "bg-white text-purple-600 shadow"
+                      : "text-gray-500 hover:text-gray-700"
+                  }
+                `}
               >
                 {f}
               </button>
@@ -128,6 +143,7 @@ export default function TaskList({ tasks, setTasks }) {
         </div>
       </div>
 
+      {/* DRAG CONTEXT */}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -144,7 +160,7 @@ export default function TaskList({ tasks, setTasks }) {
               <h4 className="text-lg font-semibold text-gray-600">
                 No tasks found
               </h4>
-              <p className="text-sm mb-4">No task match this filter</p>
+              <p className="text-sm mb-4">No task matches this filter</p>
               <button
                 onClick={() => setOpen(true)}
                 className="bg-purple-600 text-white px-4 py-2 rounded-lg"
@@ -155,7 +171,7 @@ export default function TaskList({ tasks, setTasks }) {
           )}
 
           <div className="space-y-3">
-            {tasks.map((task) => (
+            {filteredTasks.map((task) => (
               <TaskCard
                 key={task.id}
                 task={task}

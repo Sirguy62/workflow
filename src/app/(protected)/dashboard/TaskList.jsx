@@ -19,6 +19,8 @@ import {
 import { useState } from "react";
 import TaskCard from "./TaskCard";
 import CreateTaskModal from "./CreateTaskModal";
+import { PRIORITY_REVERSE_MAP } from "@/lib/priority";
+
 
 export default function TaskList({ tasks, setTasks }) {
   const [activeTask, setActiveTask] = useState(null);
@@ -62,13 +64,38 @@ export default function TaskList({ tasks, setTasks }) {
     setTasks(arrayMove(tasks, oldIndex, newIndex));
   }
 
-  function addTask(task) {
-    setTasks((prev) => [...prev, task]);
+ async function addTask(task) {
+  const res = await fetch("/api/tasks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: task.title,
+      priority: task.priority, // ✅ "High" | "Medium" | "Low"
+      dueDate: task.dueDate,
+    }),
+  });
+
+  if (!res.ok) {
+    console.error("Failed to create task");
+    return;
   }
 
-  function deleteTask(taskId) {
-    setTasks((prev) => prev.filter((t) => t.id !== taskId));
-  }
+  const saved = await res.json();
+  setTasks((prev) => [...prev, saved]);
+
+ }
+
+
+ async function deleteTask(taskId) {
+   await fetch("/api/tasks", {
+     method: "DELETE",
+     headers: { "Content-Type": "application/json" },
+     body: JSON.stringify({ id: taskId }),
+   });
+
+   setTasks((prev) => prev.filter((t) => t.id !== taskId));
+ }
+
 
   const filteredTasks = tasks.filter((task) => {
     if (filter === "all") return true;

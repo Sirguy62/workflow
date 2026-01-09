@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import MobileSidebar from "@/components/MobileSidebar";
 import StatsCards from "@/components/StatsCards";
@@ -13,6 +13,17 @@ export default function DashboardClient({ user }) {
   const [tasks, setTasks] = useState([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
+
+useEffect(() => {
+  fetch("/api/tasks")
+    .then(async (res) => {
+      if (!res.ok) return [];
+      return res.json();
+    })
+    .then(setTasks)
+    .catch(() => setTasks([]));
+}, []);
+
 
   return (
     <div className="flex min-h-screen bg-[#faf8ff]">

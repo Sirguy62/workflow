@@ -14,7 +14,7 @@ datasource db {
 //////////////////////
 
 model User {
-  id            String    @id
+  id            String @id
   name          String
   email         String
   emailVerified Boolean
@@ -26,9 +26,13 @@ model User {
   accounts Account[]
   workflows Workflow[]
 
+  // ✅ NEW
+  assignedTasks Task[] @relation("AssignedTasks")
+
   @@unique([email])
   @@map("user")
 }
+
 
 model Session {
   id        String   @id
@@ -109,18 +113,28 @@ model Stage {
   @@unique([workflowId, order])
 }
 
+enum TaskPriority {
+  Low
+  Medium
+  High
+}
+
 model Task {
   id          String   @id @default(cuid())
   title       String
   description String?
-  priority    Int      @default(1)
+  priority    TaskPriority @default(Low)
   dueDate     DateTime?
   order       Int      @default(0)
   createdAt   DateTime @default(now())
 
   workflowId String
   stageId    String
+  assigneeId String?
 
   workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
   stage    Stage    @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  assignee User?    @relation("AssignedTasks", fields: [assigneeId], references: [id])
 }
+
+

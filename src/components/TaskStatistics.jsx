@@ -9,10 +9,11 @@ function StatCard({ label, value, color }) {
   );
 }
 
-export default function TaskStatistics({ tasks }) {
+export default function TaskStatistics({ tasks = [] }) {
   const total = tasks.length;
-  const completed = tasks.filter((t) => t.status === "Completed").length;
-  const pending = total - completed;
+  const completed = tasks.filter((t) => t.completed).length;
+  const pending = tasks.filter((t) => !t.completed).length;
+
   const completionRate =
     total === 0 ? 0 : Math.round((completed / total) * 100);
 
@@ -26,12 +27,13 @@ export default function TaskStatistics({ tasks }) {
         <StatCard label="Completed" value={completed} color="text-green-600" />
         <StatCard label="Pending" value={pending} color="text-purple-600" />
         <StatCard
-          label="Completion rate"
+          label="Completion Rate"
           value={`${completionRate}%`}
           color="text-purple-600"
         />
       </div>
 
+      {/* PROGRESS BAR */}
       <div>
         <div className="flex justify-between text-sm text-gray-500 mb-1">
           <span>Task progress</span>

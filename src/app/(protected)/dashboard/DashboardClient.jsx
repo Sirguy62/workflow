@@ -74,12 +74,18 @@ useEffect(() => {
 
           {activeTab === "pending" && (
             <PendingTasksTab
+              tasks={tasks}
+              setTasks={setTasks}
               onMenuClick={() => setMobileOpen(true)}
               onAddTask={() => setCreateOpen(true)}
             />
           )}
           {activeTab === "completed" && (
-            <CompletedTasksTab onMenuClick={() => setMobileOpen(true)} />
+            <CompletedTasksTab
+              onMenuClick={() => setMobileOpen(true)}
+              tasks={tasks}
+              setTasks={setTasks}
+            />
           )}
         </section>
 

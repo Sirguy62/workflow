@@ -76,8 +76,25 @@ export default function PendingTasksTab({
             {/* Left */}
             <div className="flex gap-4">
               <IoCheckmarkCircleOutline
-                onClick={() => markCompleted(task.id)}
-                className="cursor-pointer text-gray-300 hover:text-green-500 text-2xl mt-1"
+                onClick={async () => {
+                  await fetch("/api/tasks", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      id: task.id,
+                      completed: !task.completed, // ✅ TOGGLE
+                    }),
+                  });
+
+                  setTasks((prev) =>
+                    prev.map((t) =>
+                      t.id === task.id ? { ...t, completed: !t.completed } : t
+                    )
+                  );
+                }}
+                className={`cursor-pointer text-2xl mt-1 transition
+    ${task.completed ? "text-green-500" : "text-gray-300 hover:text-green-500"}
+  `}
               />
 
               <div>

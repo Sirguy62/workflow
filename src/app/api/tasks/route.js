@@ -101,32 +101,24 @@ export async function POST(req) {
    PATCH — update task
 ========================= */
 export async function PATCH(req) {
-  const {
-    id,
-    title,
-    description, // ✅ FIX
-    priority,
-    dueDate,
-    stageId,
-    completed,
-  } = await req.json();
+  const { id, title, priority, dueDate, stageId, completed } = await req.json();
 
   const task = await prisma.task.update({
     where: { id },
     data: {
       ...(title !== undefined && { title }),
-      ...(description !== undefined && { description }), // ✅ FIX
       ...(priority !== undefined && { priority }),
-      ...(typeof completed === "boolean" && { completed }),
       ...(dueDate !== undefined && {
         dueDate: dueDate ? new Date(dueDate) : null,
       }),
-      ...(stageId && { stageId }),
+      ...(stageId !== undefined && { stageId }),
+      ...(completed !== undefined && { completed }),
     },
   });
 
   return NextResponse.json(task);
 }
+
 
 /* =========================
    DELETE — delete task

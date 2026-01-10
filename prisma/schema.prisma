@@ -125,7 +125,7 @@ model Task {
   description String?
   priority    TaskPriority @default(Low)
   dueDate     DateTime?
-  order       Int      @default(0)
+  completed   Boolean  @default(false) // ✅ NEW
   createdAt   DateTime @default(now())
 
   workflowId String
@@ -136,5 +136,6 @@ model Task {
   stage    Stage    @relation(fields: [stageId], references: [id], onDelete: Cascade)
   assignee User?    @relation("AssignedTasks", fields: [assigneeId], references: [id])
 }
+
 
 

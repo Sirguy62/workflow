@@ -19,12 +19,12 @@ import {
 import { useState } from "react";
 import TaskCard from "./TaskCard";
 import CreateTaskModal from "./CreateTaskModal";
-import { PRIORITY_REVERSE_MAP } from "@/lib/priority";
 
 
-export default function TaskList({ tasks, setTasks }) {
+
+export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen }) {
   const [activeTask, setActiveTask] = useState(null);
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState("all");
 
   /* ======================
@@ -64,38 +64,35 @@ export default function TaskList({ tasks, setTasks }) {
     setTasks(arrayMove(tasks, oldIndex, newIndex));
   }
 
- async function addTask(task) {
-  const res = await fetch("/api/tasks", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      title: task.title,
-      priority: task.priority, // ✅ "High" | "Medium" | "Low"
-      dueDate: task.dueDate,
-    }),
-  });
+  async function addTask(task) {
+    const res = await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: task.title,
+        priority: task.priority, // ✅ "High" | "Medium" | "Low"
+        dueDate: task.dueDate,
+      }),
+    });
 
-  if (!res.ok) {
-    console.error("Failed to create task");
-    return;
+    if (!res.ok) {
+      console.error("Failed to create task");
+      return;
+    }
+
+    const saved = await res.json();
+    setTasks((prev) => [...prev, saved]);
   }
 
-  const saved = await res.json();
-  setTasks((prev) => [...prev, saved]);
+  async function deleteTask(taskId) {
+    await fetch("/api/tasks", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: taskId }),
+    });
 
- }
-
-
- async function deleteTask(taskId) {
-   await fetch("/api/tasks", {
-     method: "DELETE",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({ id: taskId }),
-   });
-
-   setTasks((prev) => prev.filter((t) => t.id !== taskId));
- }
-
+    setTasks((prev) => prev.filter((t) => t.id !== taskId));
+  }
 
   const filteredTasks = tasks.filter((task) => {
     if (filter === "all") return true;
@@ -189,7 +186,7 @@ export default function TaskList({ tasks, setTasks }) {
               </h4>
               <p className="text-sm mb-4">No task matches this filter</p>
               <button
-                onClick={() => setOpen(true)}
+                onClick={() => setCreateOpen(true)}
                 className="bg-purple-600 text-white px-4 py-2 rounded-lg"
               >
                 Add New Task
@@ -223,14 +220,17 @@ export default function TaskList({ tasks, setTasks }) {
       </DndContext>
 
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => setCreateOpen(true)}
         className="mt-4 w-full border-2 border-dashed border-purple-300 rounded-lg py-2 text-purple-600"
       >
         + Add New Task
       </button>
 
-      {open && (
-        <CreateTaskModal onClose={() => setOpen(false)} onCreate={addTask} />
+      {createOpen && (
+        <CreateTaskModal
+          onClose={() => setCreateOpen(false)}
+          onCreate={addTask}
+        />
       )}
     </div>
   );

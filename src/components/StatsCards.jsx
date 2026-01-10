@@ -2,7 +2,7 @@ import TopBar from "./TopBar";
 import { TbHomeSearch } from "react-icons/tb";
 import { BsFire } from "react-icons/bs";
 
-export default function StatsCards({ tasks, onMenuClick }) {
+export default function StatsCards({ tasks, onMenuClick, onAddTask }) {
   const stats = [
     {
       label: "Total Tasks",
@@ -36,7 +36,7 @@ export default function StatsCards({ tasks, onMenuClick }) {
 
   return (
     <div>
-      <TopBar onMenuClick={onMenuClick} />
+      <TopBar onMenuClick={onMenuClick} onAddTask={onAddTask} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
         {stats.map((s) => (

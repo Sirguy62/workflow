@@ -13,6 +13,8 @@ export default function DashboardClient({ user }) {
   const [tasks, setTasks] = useState([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [createOpen, setCreateOpen] = useState(false);
+
 
 useEffect(() => {
   fetch("/api/tasks")
@@ -44,16 +46,25 @@ useEffect(() => {
               <StatsCards
                 tasks={tasks}
                 onMenuClick={() => setMobileOpen(true)}
+                onAddTask={() => setCreateOpen(true)}
               />
 
               <div className="mt-6">
-                <TaskList tasks={tasks} setTasks={setTasks} />
+                <TaskList
+                  tasks={tasks}
+                  setTasks={setTasks}
+                  createOpen={createOpen}
+                  setCreateOpen={setCreateOpen}
+                />
               </div>
             </>
           )}
 
           {activeTab === "pending" && (
-            <PendingTasksTab onMenuClick={() => setMobileOpen(true)} />
+            <PendingTasksTab
+              onMenuClick={() => setMobileOpen(true)}
+              onAddTask={() => setCreateOpen(true)}
+            />
           )}
           {activeTab === "completed" && (
             <CompletedTasksTab onMenuClick={() => setMobileOpen(true)} />

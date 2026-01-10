@@ -1,16 +1,19 @@
 "use client";
 
-// import { FiFilter } from "react-icons/fi";
 import { useState } from "react";
 import { BsCalendar3 } from "react-icons/bs";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-// import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { FaSortAmountUpAlt } from "react-icons/fa";
 import SortBar from "./Sortbar";
 import { LuMenu } from "react-icons/lu";
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
 
-export default function PendingTasksTab({ tasks = [], onAdd, onMenuClick }) {
+export default function PendingTasksTab({
+  tasks = [],
+  onMenuClick,
+  onAddTask = () => {},
+}) {
   const pendingTasks = tasks.filter((t) => !t.completed);
   const [sort, setSort] = useState("priority");
 
@@ -21,6 +24,7 @@ export default function PendingTasksTab({ tasks = [], onAdd, onMenuClick }) {
           <LuMenu size={30} className="text-purple-500" />
         </button>
       </div>
+
       {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:justify-between gap-4 w-full">
         <div>
@@ -34,14 +38,13 @@ export default function PendingTasksTab({ tasks = [], onAdd, onMenuClick }) {
             {pendingTasks.length} task needing your attention
           </p>
         </div>
-        {/* Sort */}
 
         <SortBar sort={sort} setSort={setSort} />
       </div>
 
       {/* Add new task */}
       <button
-        onClick={onAdd}
+        onClick={onAddTask}
         className="
           w-full
           border-2 border-dashed border-purple-200
@@ -65,18 +68,8 @@ export default function PendingTasksTab({ tasks = [], onAdd, onMenuClick }) {
         {pendingTasks.map((task) => (
           <div
             key={task.id}
-            className="
-              bg-white
-              border
-              rounded-xl
-              p-5
-              flex justify-between
-              shadow-sm
-              hover:shadow
-              transition
-            "
+            className="bg-white border rounded-xl p-5 flex justify-between shadow-sm hover:shadow transition"
           >
-            {/* Left */}
             <div className="flex gap-4">
               <IoCheckmarkCircleOutline className="text-gray-300 text-2xl mt-1" />
 
@@ -106,7 +99,6 @@ export default function PendingTasksTab({ tasks = [], onAdd, onMenuClick }) {
               </div>
             </div>
 
-            {/* Right */}
             <div className="flex flex-col items-end justify-between">
               <button className="text-gray-400 hover:text-gray-600">
                 <HiOutlineDotsVertical />

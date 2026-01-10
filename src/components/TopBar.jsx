@@ -2,7 +2,7 @@
 
 import { LuMenu } from "react-icons/lu";
 
-export default function TopBar({ onMenuClick }) {
+export default function TopBar({ onMenuClick, onAddTask }) {
   return (
     <div className="flex flex-col md:flex-row justify-between items-center gap-3">
       {/* Mobile menu */}
@@ -17,7 +17,10 @@ export default function TopBar({ onMenuClick }) {
         <p className="text-sm text-gray-500">Manage your tasks efficiently</p>
       </div>
 
-      <button className="w-full md:w-40 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg">
+      <button
+        onClick={onAddTask}
+        className="w-full md:w-40 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg"
+      >
         + Add New Task
       </button>
     </div>

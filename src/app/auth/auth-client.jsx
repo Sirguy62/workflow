@@ -4,12 +4,14 @@ import { useState } from "react";
 import {
   FiMail,
   FiLock,
+  FiEye,
   FiEyeOff,
   FiArrowRight,
   FiUserPlus,
   FiUser,
   FiGithub,
 } from "react-icons/fi";
+
 import { signIn, signUp, signInSocial } from "@/lib/actions/auth-actions";
 
 export default function AuthClientPage() {
@@ -19,6 +21,8 @@ export default function AuthClientPage() {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -106,15 +110,23 @@ export default function AuthClientPage() {
 
           <div className="relative">
             <FiLock className="absolute left-3 top-3.5 text-purple-500" />
+
             <input
-              type="password"
+              type={showPassword ? "text" : "password"} // ✅ toggle
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full text-gray-700 border-purple-300/40 pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-purple-400"
             />
-            <FiEyeOff className="absolute right-3 top-3.5 text-gray-400" />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)} // ✅ toggle handler
+              className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />} {/* ✅ icon swap */}
+            </button>
           </div>
 
           {error && (

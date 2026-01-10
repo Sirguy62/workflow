@@ -34,6 +34,7 @@ export async function POST(req) {
   try {
     const {
       title,
+      description, // ✅ FIX
       priority = "Low",
       dueDate,
       assigneeEmail,
@@ -77,7 +78,8 @@ export async function POST(req) {
     const task = await prisma.task.create({
       data: {
         title,
-        priority, // ✅ "Low" | "Medium" | "High"
+        description: description || null, // ✅ FIX
+        priority,
         dueDate: dueDate ? new Date(dueDate) : null,
         workflowId: workflow.id,
         stageId,
@@ -99,15 +101,27 @@ export async function POST(req) {
    PATCH — update task
 ========================= */
 export async function PATCH(req) {
-  const { id, title, priority, dueDate, stageId } = await req.json();
+  const {
+    id,
+    title,
+    description, // ✅ FIX
+    priority,
+    dueDate,
+    stageId,
+    completed,
+  } = await req.json();
 
   const task = await prisma.task.update({
     where: { id },
     data: {
-      title,
-      priority,
-      dueDate: dueDate ? new Date(dueDate) : null,
-      stageId,
+      ...(title !== undefined && { title }),
+      ...(description !== undefined && { description }), // ✅ FIX
+      ...(priority !== undefined && { priority }),
+      ...(typeof completed === "boolean" && { completed }),
+      ...(dueDate !== undefined && {
+        dueDate: dueDate ? new Date(dueDate) : null,
+      }),
+      ...(stageId && { stageId }),
     },
   });
 

@@ -14,17 +14,28 @@ export default function DashboardClient({ user }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [createOpen, setCreateOpen] = useState(false);
+  const [loadingTasks, setLoadingTasks] = useState(true);
+
 
 
 useEffect(() => {
-  fetch("/api/tasks")
-    .then(async (res) => {
-      if (!res.ok) return [];
-      return res.json();
-    })
-    .then(setTasks)
-    .catch(() => setTasks([]));
+  async function loadTasks() {
+    try {
+      setLoadingTasks(true);
+      const res = await fetch("/api/tasks");
+      const data = res.ok ? await res.json() : [];
+      setTasks(data);
+    } catch {
+      setTasks([]);
+    } finally {
+      setLoadingTasks(false);
+    }
+  }
+
+  loadTasks();
 }, []);
+
+
 
 
   return (
@@ -55,6 +66,7 @@ useEffect(() => {
                   setTasks={setTasks}
                   createOpen={createOpen}
                   setCreateOpen={setCreateOpen}
+                  loading={loadingTasks}
                 />
               </div>
             </>

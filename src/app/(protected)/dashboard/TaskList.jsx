@@ -22,7 +22,7 @@ import CreateTaskModal from "./CreateTaskModal";
 
 
 
-export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen }) {
+export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen, loading }) {
   const [activeTask, setActiveTask] = useState(null);
   // const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState("all");
@@ -70,7 +70,8 @@ export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen })
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         title: task.title,
-        priority: task.priority, // ✅ "High" | "Medium" | "Low"
+        description: task.description, // ✅ FIX
+        priority: task.priority,
         dueDate: task.dueDate,
       }),
     });
@@ -136,7 +137,7 @@ export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen })
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="px-3 py-2 rounded-lg border text-sm capitalize"
+              className="px-3 py-2 rounded-lg border text-sm text-gray-600 border-purple-300/40 capitalize"
             >
               {["all", "today", "week", "high", "medium", "low"].map((f) => (
                 <option key={f} value={f}>
@@ -178,7 +179,16 @@ export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen })
           items={tasks.map((t) => t.id)}
           strategy={verticalListSortingStrategy}
         >
-          {filteredTasks.length === 0 && (
+          {loading ? (
+            <div className="border rounded-xl p-10 text-center text-gray-400">
+              <div className="animate-pulse space-y-3">
+                <div className="h-4 bg-gray-200 rounded w-1/3 mx-auto" />
+                <div className="h-3 bg-gray-200 rounded w-1/2 mx-auto" />
+                <div className="h-3 bg-gray-200 rounded w-2/3 mx-auto" />
+              </div>
+              <p className="mt-4 text-sm">Loading tasks…</p>
+            </div>
+          ) : filteredTasks.length === 0 ? (
             <div className="border rounded-xl p-10 text-center text-gray-400">
               <div className="text-4xl mb-2">📅</div>
               <h4 className="text-lg font-semibold text-gray-600">
@@ -192,7 +202,7 @@ export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen })
                 Add New Task
               </button>
             </div>
-          )}
+          ) : null}
 
           <div className="space-y-3">
             {filteredTasks.map((task) => (

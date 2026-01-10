@@ -45,7 +45,7 @@ export default function Sidebar({ user, activeTab, setActiveTab }) {
             <Lightbulb size={18} />
           </div>
           <div>
-            <p className="font-semibold text-sm">Pro Tip</p>
+            <p className="font-semibold text-sm text-gray-600">Pro Tip</p>
             <p className="text-xs text-gray-600">
               Use keyboard shortcuts to boost productivity
             </p>

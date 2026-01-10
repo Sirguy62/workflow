@@ -1,28 +1,45 @@
 "use client";
 
-// import { FiFilter } from "react-icons/fi";
 import { useState } from "react";
 import { BsCalendar3 } from "react-icons/bs";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-// import { IoCheckmarkCircleOutline } from "react-icons/io5";
-import { FaSortAmountUpAlt } from "react-icons/fa";
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import SortBar from "./Sortbar";
 import { LuMenu } from "react-icons/lu";
 
-export default function PendingTasksTab({ tasks = [], onAdd, onMenuClick }) {
+export default function PendingTasksTab({
+  tasks = [],
+  setTasks,
+  onAddTask,
+  onMenuClick,
+}) {
   const pendingTasks = tasks.filter((t) => !t.completed);
   const [sort, setSort] = useState("priority");
 
+  async function markCompleted(id) {
+    await fetch("/api/tasks", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, completed: true }),
+    });
+
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, completed: true } : t))
+    );
+  }
+
   return (
     <section className="w-full space-y-6">
+      {/* Mobile menu */}
       <div className="flex md:hidden w-full">
         <button onClick={onMenuClick}>
           <LuMenu size={30} className="text-purple-500" />
         </button>
       </div>
+
       {/* Header */}
-      <div className="flex flex-col md:flex-row items-start md:justify-between gap-4 w-full">
+      <div className="flex flex-col md:flex-row items-start md:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <span className="text-purple-500 text-xl">✓≡</span>
@@ -34,25 +51,14 @@ export default function PendingTasksTab({ tasks = [], onAdd, onMenuClick }) {
             {pendingTasks.length} task needing your attention
           </p>
         </div>
-        {/* Sort */}
 
         <SortBar sort={sort} setSort={setSort} />
       </div>
 
       {/* Add new task */}
       <button
-        onClick={onAdd}
-        className="
-          w-full
-          border-2 border-dashed border-purple-200
-          rounded-xl
-          py-6
-          flex items-center justify-center gap-3
-          text-purple-600
-          bg-purple-50/40
-          hover:bg-purple-50
-          transition
-        "
+        onClick={onAddTask}
+        className="w-full border-2 border-dashed border-purple-200 rounded-xl py-6 flex items-center justify-center gap-3 text-purple-600 bg-purple-50/40 hover:bg-purple-50 transition"
       >
         <span className="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow">
           +
@@ -60,25 +66,36 @@ export default function PendingTasksTab({ tasks = [], onAdd, onMenuClick }) {
         <span className="font-medium">Add New Task</span>
       </button>
 
-      {/* Task Cards */}
+      {/* Tasks */}
       <div className="space-y-4">
         {pendingTasks.map((task) => (
           <div
             key={task.id}
-            className="
-              bg-white
-              border
-              rounded-xl
-              p-5
-              flex justify-between
-              shadow-sm
-              hover:shadow
-              transition
-            "
+            className="bg-white border rounded-xl p-5 flex justify-between shadow-sm hover:shadow transition"
           >
             {/* Left */}
             <div className="flex gap-4">
-              <IoCheckmarkCircleOutline className="text-gray-300 text-2xl mt-1" />
+              <IoCheckmarkCircleOutline
+                onClick={async () => {
+                  await fetch("/api/tasks", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      id: task.id,
+                      completed: !task.completed, // ✅ TOGGLE
+                    }),
+                  });
+
+                  setTasks((prev) =>
+                    prev.map((t) =>
+                      t.id === task.id ? { ...t, completed: !t.completed } : t
+                    )
+                  );
+                }}
+                className={`cursor-pointer text-2xl mt-1 transition
+    ${task.completed ? "text-green-500" : "text-gray-300 hover:text-green-500"}
+  `}
+              />
 
               <div>
                 <div className="flex items-center gap-2">
@@ -115,16 +132,22 @@ export default function PendingTasksTab({ tasks = [], onAdd, onMenuClick }) {
               <div className="text-right text-sm text-gray-500 space-y-1">
                 <div className="flex items-center gap-1">
                   <BsCalendar3 />
-                  <span>{task.dueDate || "01 16"}</span>
+                  <span>{task.dueDate || "—"}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <MdOutlineAccessTime />
-                  <span>Created {task.createdAt || "01 06"}</span>
+                  <span>
+                    Created {new Date(task.createdAt).toLocaleDateString()}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
         ))}
+
+        {pendingTasks.length === 0 && (
+          <p className="text-center text-gray-400">No pending tasks</p>
+        )}
       </div>
     </section>
   );

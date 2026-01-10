@@ -34,7 +34,7 @@ export default function CreateTaskModal({ onClose, onCreate }) {
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
       <form
         onSubmit={submit}
-        className="bg-white rounded-xl w-[420px] p-6 space-y-4"
+        className="bg-white rounded-xl w-95 lg:w-112.5 p-6 space-y-4"
       >
         {/* HEADER */}
         <div className="flex justify-between items-center">

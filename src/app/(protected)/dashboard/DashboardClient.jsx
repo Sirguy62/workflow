@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import MobileSidebar from "@/components/MobileSidebar";
 import StatsCards from "@/components/StatsCards";
@@ -13,6 +13,30 @@ export default function DashboardClient({ user }) {
   const [tasks, setTasks] = useState([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [createOpen, setCreateOpen] = useState(false);
+  const [loadingTasks, setLoadingTasks] = useState(true);
+
+
+
+useEffect(() => {
+  async function loadTasks() {
+    try {
+      setLoadingTasks(true);
+      const res = await fetch("/api/tasks");
+      const data = res.ok ? await res.json() : [];
+      setTasks(data);
+    } catch {
+      setTasks([]);
+    } finally {
+      setLoadingTasks(false);
+    }
+  }
+
+  loadTasks();
+}, []);
+
+
+
 
   return (
     <div className="flex min-h-screen bg-[#faf8ff]">
@@ -33,19 +57,35 @@ export default function DashboardClient({ user }) {
               <StatsCards
                 tasks={tasks}
                 onMenuClick={() => setMobileOpen(true)}
+                onAddTask={() => setCreateOpen(true)}
               />
 
               <div className="mt-6">
-                <TaskList tasks={tasks} setTasks={setTasks} />
+                <TaskList
+                  tasks={tasks}
+                  setTasks={setTasks}
+                  createOpen={createOpen}
+                  setCreateOpen={setCreateOpen}
+                  loading={loadingTasks}
+                />
               </div>
             </>
           )}
 
           {activeTab === "pending" && (
-            <PendingTasksTab onMenuClick={() => setMobileOpen(true)} />
+            <PendingTasksTab
+              tasks={tasks}
+              setTasks={setTasks}
+              onMenuClick={() => setMobileOpen(true)}
+              onAddTask={() => setCreateOpen(true)}
+            />
           )}
           {activeTab === "completed" && (
-            <CompletedTasksTab onMenuClick={() => setMobileOpen(true)} />
+            <CompletedTasksTab
+              onMenuClick={() => setMobileOpen(true)}
+              tasks={tasks}
+              setTasks={setTasks}
+            />
           )}
         </section>
 

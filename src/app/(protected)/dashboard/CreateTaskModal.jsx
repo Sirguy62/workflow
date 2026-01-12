@@ -36,7 +36,7 @@ export default function CreateTaskModal({ onClose, onCreate }) {
         onSubmit={submit}
         className="bg-white rounded-xl w-95 lg:w-112.5 p-6 space-y-4"
       >
-        {/* HEADER */}
+      
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-md text-gray-700">Create Task</h2>
           <button type="button" onClick={onClose} className="text-gray-700">
@@ -44,7 +44,7 @@ export default function CreateTaskModal({ onClose, onCreate }) {
           </button>
         </div>
 
-        {/* TITLE */}
+       
         <div>
           <label className="block font-medium text-sm text-gray-700 mb-1">
             Task Details
@@ -58,7 +58,7 @@ export default function CreateTaskModal({ onClose, onCreate }) {
           />
         </div>
 
-        {/* DESCRIPTION */}
+     
         <div>
           <div className="flex items-center gap-1 mb-1">
             <RiMenu2Line className="text-purple-500" size={18} />
@@ -74,9 +74,7 @@ export default function CreateTaskModal({ onClose, onCreate }) {
           />
         </div>
 
-        {/* PRIORITY + DATE */}
         <div className="flex gap-6">
-          {/* PRIORITY */}
           <div className="w-full">
             <div className="flex items-center gap-1 mb-1">
               <IoFlagOutline className="text-purple-500" size={18} />
@@ -105,7 +103,6 @@ export default function CreateTaskModal({ onClose, onCreate }) {
             </select>
           </div>
 
-          {/* DUE DATE */}
           <div className="w-full">
             <div className="flex items-center gap-1 mb-1">
               <LuCalendarClock className="text-purple-500" size={18} />
@@ -122,7 +119,6 @@ export default function CreateTaskModal({ onClose, onCreate }) {
           </div>
         </div>
 
-        {/* SUBMIT */}
         <button className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg w-full mt-2">
           <TbPlaylistAdd size={18} />
           Create Task

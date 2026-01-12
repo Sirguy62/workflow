@@ -24,27 +24,20 @@ import CreateTaskModal from "./CreateTaskModal";
 
 export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen, loading }) {
   const [activeTask, setActiveTask] = useState(null);
-  // const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState("all");
 
-  /* ======================
-     ✅ MOBILE-SAFE SENSORS
-  ====================== */
   const sensors = useSensors(
-    // Desktop / mouse
     useSensor(PointerSensor, {
       activationConstraint: { distance: 6 },
     }),
 
-    // ✅ Mobile / touch (long press)
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 200, // long press
+        delay: 200, 
         tolerance: 8,
       },
     }),
 
-    // Keyboard accessibility
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -70,7 +63,7 @@ export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen, l
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         title: task.title,
-        description: task.description, // ✅ FIX
+        description: task.description, 
         priority: task.priority,
         dueDate: task.dueDate,
       }),
@@ -121,7 +114,6 @@ export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen, l
 
   return (
     <div className="bg-white rounded-xl border p-4">
-      {/* HEADER */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-gray-700 font-semibold">
           <span>🔍</span>
@@ -130,9 +122,7 @@ export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen, l
           </span>
         </div>
 
-        {/* FILTERS */}
         <div>
-          {/* Mobile → Select */}
           <div className="block md:hidden">
             <select
               value={filter}
@@ -147,7 +137,6 @@ export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen, l
             </select>
           </div>
 
-          {/* Desktop → Buttons */}
           <div className="hidden md:flex gap-2 bg-gray-100 rounded-lg p-1">
             {["all", "today", "week", "high", "medium", "low"].map((f) => (
               <button
@@ -168,7 +157,6 @@ export default function TaskList({ tasks, setTasks, createOpen, setCreateOpen, l
         </div>
       </div>
 
-      {/* DRAG CONTEXT */}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

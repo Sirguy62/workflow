@@ -29,7 +29,6 @@ const sortOptions = [
 export default function SortBar({ sort, setSort }) {
   return (
     <div className="flex items-center gap-2 w-full md:w-auto">
-      {/* ================= MOBILE (SELECT) ================= */}
       <div className="flex md:hidden items-center justify-between gap-2 bg-white border rounded-xl px-3 py-2 shadow-sm w-full">
         <div className="flex items-center p-3">
           <FiFilter className="text-purple-500" />
@@ -49,7 +48,6 @@ export default function SortBar({ sort, setSort }) {
         </select>
       </div>
 
-      {/* ================= DESKTOP (BUTTONS) ================= */}
       <div className="hidden md:flex items-center  bg-white border rounded-xl px-3 py-4 shadow-sm">
         <FiFilter className="text-purple-500" />
         <span className="text-sm font-bold text-gray-700">Sort By:</span>

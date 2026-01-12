@@ -31,14 +31,12 @@ export default function PendingTasksTab({
 
   return (
     <section className="w-full space-y-6">
-      {/* Mobile menu */}
       <div className="flex md:hidden w-full">
         <button onClick={onMenuClick}>
           <LuMenu size={30} className="text-purple-500" />
         </button>
       </div>
 
-      {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
@@ -55,7 +53,6 @@ export default function PendingTasksTab({
         <SortBar sort={sort} setSort={setSort} />
       </div>
 
-      {/* Add new task */}
       <button
         onClick={onAddTask}
         className="w-full border-2 border-dashed border-purple-200 rounded-xl py-6 flex items-center justify-center gap-3 text-purple-600 bg-purple-50/40 hover:bg-purple-50 transition"
@@ -66,14 +63,12 @@ export default function PendingTasksTab({
         <span className="font-medium">Add New Task</span>
       </button>
 
-      {/* Tasks */}
       <div className="space-y-4">
         {pendingTasks.map((task) => (
           <div
             key={task.id}
             className="bg-white border rounded-xl p-5 flex justify-between shadow-sm hover:shadow transition"
           >
-            {/* Left */}
             <div className="flex gap-4">
               <IoCheckmarkCircleOutline
                 onClick={async () => {
@@ -82,7 +77,7 @@ export default function PendingTasksTab({
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                       id: task.id,
-                      completed: !task.completed, // ✅ TOGGLE
+                      completed: !task.completed, 
                     }),
                   });
 
@@ -123,7 +118,6 @@ export default function PendingTasksTab({
               </div>
             </div>
 
-            {/* Right */}
             <div className="flex flex-col items-end justify-between">
               <button className="text-gray-400 hover:text-gray-600">
                 <HiOutlineDotsVertical />

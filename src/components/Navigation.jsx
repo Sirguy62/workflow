@@ -15,7 +15,6 @@ export default function Navigation({ session }) {
   const name = session?.user?.name || "User";
   const initial = name.charAt(0).toUpperCase();
 
-  // Close on outside click
   useEffect(() => {
     function handleClickOutside(e) {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -62,7 +61,6 @@ export default function Navigation({ session }) {
             </Link>
           )}
 
-          {/* User Menu */}
           {session && (
             <div className="relative" ref={menuRef}>
               <button

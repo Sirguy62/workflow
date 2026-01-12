@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 export async function PATCH(req) {
   try {
     const { tasks } = await req.json();
-    // tasks = [{ id, order }]
 
     if (!Array.isArray(tasks)) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });

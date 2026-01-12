@@ -26,7 +26,7 @@ model User {
   accounts Account[]
   workflows Workflow[]
 
-  // ✅ NEW
+
   assignedTasks Task[] @relation("AssignedTasks")
 
   @@unique([email])
@@ -125,7 +125,7 @@ model Task {
   description String?
   priority    TaskPriority @default(Low)
   dueDate     DateTime?
-  completed   Boolean  @default(false) // ✅ NEW
+  completed   Boolean  @default(false) 
   createdAt   DateTime @default(now())
 
   workflowId String

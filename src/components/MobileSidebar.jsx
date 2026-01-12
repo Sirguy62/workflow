@@ -19,13 +19,11 @@ export default function MobileSidebar({
 
   return (
     <>
-      {/* Overlay */}
       <div
         onClick={onClose}
         className="fixed inset-0 bg-black/40 z-40 md:hidden"
       />
 
-      {/* Sidebar */}
       <aside className="fixed top-16 left-0 z-50 h-screen w-64 bg-white px-5 py-6 md:hidden">
         <div className="block mb-6">
           <h2 className="text-lg font-semibold text-gray-800">
@@ -59,8 +57,6 @@ export default function MobileSidebar({
     </>
   );
 }
-
-/* ---------------- NAV BUTTON ---------------- */
 
 function NavButton({ icon, label, active, onClick }) {
   return (

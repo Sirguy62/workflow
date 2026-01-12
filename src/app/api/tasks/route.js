@@ -3,9 +3,6 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-/* =========================
-   GET — load tasks on refresh
-========================= */
 export async function GET() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -27,14 +24,12 @@ export async function GET() {
   return NextResponse.json(tasks);
 }
 
-/* =========================
-   POST — create task
-========================= */
+
 export async function POST(req) {
   try {
     const {
       title,
-      description, // ✅ FIX
+      description, 
       priority = "Low",
       dueDate,
       assigneeEmail,
@@ -51,8 +46,6 @@ export async function POST(req) {
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    // Get user's first workflow + first stage (Backlog)
     const workflow = await prisma.workflow.findFirst({
       where: { ownerId: session.user.id },
       include: {
@@ -66,7 +59,6 @@ export async function POST(req) {
 
     const stageId = workflow.stages[0].id;
 
-    // Optional assignee by email
     let assigneeId = null;
     if (assigneeEmail) {
       const user = await prisma.user.findUnique({
@@ -78,7 +70,7 @@ export async function POST(req) {
     const task = await prisma.task.create({
       data: {
         title,
-        description: description || null, // ✅ FIX
+        description: description || null, 
         priority,
         dueDate: dueDate ? new Date(dueDate) : null,
         workflowId: workflow.id,
@@ -97,9 +89,6 @@ export async function POST(req) {
   }
 }
 
-/* =========================
-   PATCH — update task
-========================= */
 export async function PATCH(req) {
   const { id, title, priority, dueDate, stageId, completed } = await req.json();
 
@@ -120,9 +109,6 @@ export async function PATCH(req) {
 }
 
 
-/* =========================
-   DELETE — delete task
-========================= */
 export async function DELETE(req) {
   const { id } = await req.json();
 

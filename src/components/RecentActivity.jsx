@@ -15,7 +15,6 @@ export default function RecentActivity({ tasks }) {
     );
   }
 
-  // Get latest task by createdAt
   const latest = [...tasks].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   )[0];

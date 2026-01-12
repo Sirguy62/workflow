@@ -112,7 +112,7 @@ export default function AuthClientPage() {
             <FiLock className="absolute left-3 top-3.5 text-purple-500" />
 
             <input
-              type={showPassword ? "text" : "password"} // ✅ toggle
+              type={showPassword ? "text" : "password"} 
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -122,10 +122,10 @@ export default function AuthClientPage() {
 
             <button
               type="button"
-              onClick={() => setShowPassword((v) => !v)} // ✅ toggle handler
+              onClick={() => setShowPassword((v) => !v)} 
               className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
             >
-              {showPassword ? <FiEyeOff /> : <FiEye />} {/* ✅ icon swap */}
+              {showPassword ? <FiEyeOff /> : <FiEye />} 
             </button>
           </div>
 

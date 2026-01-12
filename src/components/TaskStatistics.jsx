@@ -20,8 +20,6 @@ export default function TaskStatistics({ tasks = [] }) {
   return (
     <div className="bg-white border rounded-xl p-4 space-y-4">
       <h4 className="font-semibold text-gray-700">Task Statistics</h4>
-
-      {/* STATS GRID */}
       <div className="grid grid-cols-2 gap-4">
         <StatCard label="Total Tasks" value={total} color="text-purple-600" />
         <StatCard label="Completed" value={completed} color="text-green-600" />
@@ -33,7 +31,6 @@ export default function TaskStatistics({ tasks = [] }) {
         />
       </div>
 
-      {/* PROGRESS BAR */}
       <div>
         <div className="flex justify-between text-sm text-gray-500 mb-1">
           <span>Task progress</span>

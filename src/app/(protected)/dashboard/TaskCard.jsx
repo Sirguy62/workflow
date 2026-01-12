@@ -29,7 +29,6 @@ export default function TaskCard({ task, onDelete, onUpdate }) {
     opacity: isDragging ? 0.5 : 1,
   };
 
-  // Close menu when clicking outside
   useEffect(() => {
     function handleClick(e) {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -63,7 +62,6 @@ export default function TaskCard({ task, onDelete, onUpdate }) {
           </div>
 
           <div className="flex flex-col items-center gap-2">
-            {/* DRAG HANDLE */}
             <button
               ref={setActivatorNodeRef}
               {...attributes}
@@ -71,11 +69,9 @@ export default function TaskCard({ task, onDelete, onUpdate }) {
               className="cursor-grab active:cursor-grabbing text-gray-400"
               aria-label="Drag task"
             >
-              {/* <HiOutlineDotsVertical size={25} /> */}
               Drag!!
             </button>
 
-            {/* ACTION MENU */}
             <button
               onClick={() => setMenuOpen((v) => !v)}
               className="text-gray-400 hover:text-gray-600"
@@ -98,7 +94,6 @@ export default function TaskCard({ task, onDelete, onUpdate }) {
           )}
         </div>
 
-        {/* POPUP MENU */}
         {menuOpen && (
           <div
             ref={menuRef}
@@ -128,7 +123,6 @@ export default function TaskCard({ task, onDelete, onUpdate }) {
         )}
       </div>
 
-      {/* EDIT MODAL */}
       {editOpen && (
         <EditTaskModal
           task={task}

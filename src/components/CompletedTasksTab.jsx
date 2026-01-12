@@ -27,14 +27,13 @@ export default function CompletedTasksTab({
 
   return (
     <section className="w-full space-y-6">
-      {/* Mobile menu */}
       <div className="flex md:hidden w-full">
         <button onClick={onMenuClick}>
           <LuMenu size={30} className="text-purple-500" />
         </button>
       </div>
 
-      {/* Header */}
+  
       <div>
         <h2 className="text-3xl font-extrabold text-gray-800">
           Completed Tasks
@@ -44,7 +43,6 @@ export default function CompletedTasksTab({
         </p>
       </div>
 
-      {/* Tasks */}
       <div className="space-y-4">
         {completedTasks.map((task) => (
           <div

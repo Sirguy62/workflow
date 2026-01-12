@@ -5,7 +5,6 @@ import { LuMenu } from "react-icons/lu";
 export default function TopBar({ onMenuClick, onAddTask }) {
   return (
     <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-      {/* Mobile menu */}
       <div className="flex md:hidden w-full">
         <button onClick={onMenuClick}>
           <LuMenu size={30} className="text-purple-500" />
